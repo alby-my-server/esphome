@@ -22,8 +22,8 @@ namespace aht10 {
 static const char *const TAG = "aht10";
 static const uint8_t AHT10_CALIBRATE_CMD[] = {0xE1};
 static const uint8_t AHT10_MEASURE_CMD[] = {0xAC, 0x33, 0x00};
-static const uint8_t AHT10_DEFAULT_DELAY = 75;    // ms, for calibration and temperature measurement
-static const uint8_t AHT10_HUMIDITY_DELAY = 75;  // ms
+static const uint8_t AHT10_DEFAULT_DELAY = 8;    // ms, for calibration and temperature measurement
+static const uint8_t AHT10_HUMIDITY_DELAY = 40;  // ms
 static const uint8_t AHT10_ATTEMPTS = 3;         // safety margin, normally 3 attempts are enough
 
 void AHT10Component::setup() {
@@ -72,7 +72,7 @@ void AHT10Component::update() {
     delay_ms = AHT10_HUMIDITY_DELAY;
   bool success = false;
   for (int i = 0; i < AHT10_ATTEMPTS; ++i) {
-    ESP_LOGVV(TAG, "Attempt %d at %6u", i, millis());
+    ESP_LOGD(TAG, "Attempt %d at %6u", i, millis());
     // delay_microseconds_accurate no longer needed as delay(delay_ms) was added in last release
     //delay_microseconds_accurate(4);
     //
@@ -93,7 +93,7 @@ void AHT10Component::update() {
     } else if (data[1] == 0x0 && data[2] == 0x0 && (data[3] >> 4) == 0x0) {
       // Unrealistic humidity (0x0)
       if (this->humidity_sensor_ == nullptr) {
-        ESP_LOGVV(TAG, "ATH10 Unrealistic humidity (0x0), but humidity is not required");
+        ESP_LOGD(TAG, "ATH10 Unrealistic humidity (0x0), but humidity is not required");
         break;
       } else {
         ESP_LOGD(TAG, "ATH10 Unrealistic humidity (0x0), retrying...");
@@ -105,7 +105,7 @@ void AHT10Component::update() {
       }
     } else {
       // data is valid, we can break the loop
-      ESP_LOGVV(TAG, "Answer at %6u", millis());
+      ESP_LOGD(TAG, "Answer at %6u", millis());
       success = true;
       break;
     }
