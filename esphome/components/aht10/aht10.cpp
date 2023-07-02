@@ -71,12 +71,10 @@ void AHT10Component::update() {
   if (this->humidity_sensor_ != nullptr)
     delay_ms = AHT10_HUMIDITY_DELAY;
   bool success = false;
-
-  
   for (int i = 0; i < AHT10_ATTEMPTS; ++i) {
     ESP_LOGD(TAG, "Attempt %d at %6u", i, millis());
     //delay_microseconds_accurate no longer needed as delay(delay_ms) was added in last release
-    delay_microseconds_accurate(1);
+    delay_microseconds_accurate(0);
     
      the 'this->write(&reg, 1)' //makes the aht10 unreliable again. after removing this part measurements are ok.  
     uint8_t reg = 0;
