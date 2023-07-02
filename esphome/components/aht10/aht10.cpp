@@ -75,7 +75,7 @@ void AHT10Component::update() {
     ESP_LOGD(TAG, "Attempt %d at %6u", i, millis());
     //delay_microseconds_accurate no longer needed as delay(delay_ms) was added in last release
     //delay_microseconds_accurate(2);
-    delay_microseconds_safe(4);
+    delay_microseconds_safe();
     
      the 'this->write(&reg, 1)' //makes the aht10 unreliable again. after removing this part measurements are ok.  
     uint8_t reg = 0;
