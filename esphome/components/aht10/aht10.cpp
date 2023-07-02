@@ -82,7 +82,7 @@ void AHT10Component::update() {
       ESP_LOGD(TAG, "Communication with AHT10 failed, waiting...");
       continue;
     }
-    //delay(delay_ms);
+    delay(delay_ms);
     if (this->read(data, 6) != i2c::ERROR_OK) {
       ESP_LOGD(TAG, "Communication with AHT10 failed, waiting...");
       continue;
